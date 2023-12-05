@@ -1,0 +1,198 @@
+Problem:
+While using: npx create-react-app my-app
+
+### Getting below msg:
+You are running `create-react-app` 5.0.0, which is behind the latest release (5.0.1).
+
+We no longer support global installation of Create React App.
+
+Please remove any global installs with one of the following commands:
+- npm uninstall -g create-react-app
+- yarn global remove create-react-app
+
+The latest instructions for creating a new app can be found here:
+https://create-react-app.dev/docs/getting-started/
+
+
+*** Run the following 3 commands sequentially: ***
+npm uninstall -g create-react-app
+npx clear-npx-cache
+npm i create-react-app
+
+Then, now we can use:
+npx create-react-app my-app
+
+
+1. ContextAPI:
+     Note: As we know in ContextAPI we use provider and consumer
+            but after 'react-16.3' instead of consumer we use 'useContext'
+
+     > useContext: Alternative for Consumer.
+
+     ** Before React 16.3.0:
+
+        > To consume the context value, we used the Consumer component 
+     
+     
+     ** React 16.3.0 and later:
+
+        >   The Consumer component is no longer required. Instead, we
+            use the useContext hook to consume the context value.
+        
+        >   while using 'Consumer' is still valid, the React team    
+            encourages developers to adopt newer patterns and hooks like 'useContext' for a more concise and readable code.
+
+        > const value = useContext(MyContext);
+
+2. useReducer:
+
+(i) Defination:
+>> useReducer is a hook that is used for state management.
+>> It is an alternative of useState
+
+
+(ii) Point to Remember:
+> useState --> Related to --> State
+> useEffect --> Related to --> Side Effect
+> useContext --> Related to --> Context API
+> useReducer --> Related to --> reducers (Reducer function)
+
+(iii) Reduce Defination:
+>>> useReducer is similar as 'reduce' in JavaScript:
+> Reduce: The reduce() method executes a reducer function on each 
+>          element of array, and provide single output value.
+
+(iv) Difference b/w useReducer and reduce:
+
+      Reduce in JavaScript                   useReducer in React
+
+>
+array.reduce(reducer, initialValue)   useReducer(reducer, initialState)
+                                      Ex: 
+Here, reducer: reducer Function       const [state, dispatch] = 
+                                    useReducer(reducer, initialState)
+
+>
+singleVal =                            newState =
+    reduce(reducer, initialVal)           reducer(currentState, action)
+                                    Ex: 
+                                    const reducer = (state, action) => {
+                                        return newState;
+                                    }
+
+
+>
+reduce method return a single value.   useReducer returns a pair of
+                                        value. [newState, dispatch]
+
+
+(v) useReducer Summary:
+
+>>>>> Hook that is used for state management in React.
+
+>>>>> useReducer is related to reducer Function.
+
+>>>>> useReducer accept two parameter: reducer function & initialState.
+>>>      useReducer(reducer, initialState)
+
+
+>>>>> The reducer function again accept two parameter:
+>>>      reducer(currentState, action)
+> Depending on Current state and action reducer func return a newState.
+
+
+(v) Difference b/w useState and useReducer:
+
+>>>> useState:
+i. Simple State Management: useState is used for managing simple state
+     in functional components. It's suitable for handling independent pieces of state.
+
+ii. Single Value State: It is designed for managing a single value or
+     a few independent values within a component.
+
+Update Mechanism: The state update is done by providing a new state 
+    value or a function that produces the new state based on the previous state.
+
+
+>>>> useReducer:
+i. Complex State Logic: useReducer is used for managing more complex 
+    state logic where the next state depends on the previous state and action. It's suitable for scenarios where state transitions are more involved.
+
+ii. State and Action: It is designed to manage state and actions.
+     Actions are objects that describe state changes.
+
+iii. Update Mechanism: The state update logic is encapsulated in a
+     reducer function. The dispatch function is used to dispatch actions that trigger state updates.
+
+
+i. Hook:
+    useReducer (React Hook): This is a built-in React hook that allows state management in functional components. It's part of the React library and is used locally within a component.
+
+    Redux Reducer: Redux is a separate library for managing the state of an entire application. A Redux reducer is a pure function that handles state changes in the Redux store.
+
+ii. Scope:
+    useReducer: Typically used for local component state. The state managed by useReducer is confined to the component where it is declared.
+
+    Redux Reducer: Manages global state in the Redux store. The state managed by a Redux reducer is shared across the entire application.
+
+iii. Middleware and Ecosystem:
+    useReducer: Doesn't come with middleware or a set ecosystem of tools. It's a basic tool provided by React for managing local component state.
+
+    Redux Reducer: Often used with middleware (like Redux Thunk) and has a rich ecosystem of tools, middleware, and extensions for advanced state management, asynchronous actions, and more.
+
+iv. Use Cases:
+    useReducer: Suitable for managing local state within a component or a few related components.
+
+    Redux Reducer: More suitable for larger applications with complex state management needs, where you need a centralized state, middleware for asynchronous actions, and a robust ecosystem for debugging and managing state.
+
+
+
+3. Steps to Push the changes on Git:
+
+i. Cut and paste frontend folder inside backend folder of project.
+ii. We need to change the port number from static to dynamic.
+    Means if we added port num to .env file then have to remove port num from there and add in App.js of backend like:
+    const port = process.env.PORT || 8000;
+iii. Create .gitignore file for backend and add 'node_modules' and  
+    configure.env file in it.
+iv. Now we have to build our React Application (Frontend), So we can 
+    get the 'production' version of our React(Frontend) Application.
+    > Go on 'backend' > 'frontend' path and execute cmd: npm run build
+    Thus, after executing above cmd: we will get 'build folder and now we have to deploy this build folder & our server (backend) folder.
+v. Now to give information when to execute frontend after deployment: 
+    We need to add below line in in bottom of App.js of backend folder and have to pass path of build folder of frontend.
+    if(process.env.NODE_ENV === 'production'){
+        app.use(express.static("frontend/build"))
+    }
+vi. Delete 'proxy' from 'package.js' of frontend because now both 
+    client(frontend) and server(backend) are same. (Have to run on same domain).
+vii. Now, Finally inside script of 'package.json' file of backend we 
+        have to add: 
+        start: 'node app.js'
+        'postbuild': 'NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build'
+
+        Here, we have to tell what we have to before running the frontend and backend server means we have to install npm and so we are passing here npm install 'folder name of frontend'.
+
+viii. Note: If we find '.git' folder inside the 'frontend' folder we
+        need to simply delete it.
+
+ix. Now go on GitHub and create a new repository there.
+
+x. Now go on path 'MERN DEPLOYMENT' > 'backend' and initialise git by 
+    using cmd: git init.
+    On executing above cmd, we will get below msg: 
+    Initialized empty Git repository in D:/Important/1) Tutorial  (Documents)/6) Mern Stack/3. Mern/Mern Deployment/backend/.git/
+
+xi. Check status by cmd 'git status' and then execute the below line:
+    git commit -m "mern first commit"
+
+xii. cmd: git branch -M main
+
+xiii. Execute below cmd: 'git remote add origin' and gived the http 
+        url of created new repository.
+        git remote add origin git@github.com:Ankitkr-05/Mern_First_Project.git
+
+
+
+
+

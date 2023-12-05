@@ -1,0 +1,36 @@
+(Password - Mongo@123)
+akrmern603 -> username for database and 'mangoapple' is password
+
+(8) To Login with securing password:
+        By using Hash (Using bcryptjs)
+        Note: Add confirm password in schema and also pass the condition
+                for confirm password must be same with password during registration.
+
+        (i) During Registration:
+        Hash password (Converting user entered password to bcrypt password)
+        > Call 'pre' method to bcrypt password before 
+          saving documents in database. 
+        > pass the method or type of event (like save, remove, validate) 
+          before which have to call pre method and second parameter as
+          anonymous function with argument 'next'.
+        > Use bcrypt.hash() method to hash the password.
+
+        (ii) During Login: 
+        Comparision of user entered password and 
+        bcrypt password during login:
+        > By using bcrypt.compare() method
+
+(9) User Authentication Using JWT & Stored Token In MongoDB Atlas:
+        (i) Generate JWT Token and stored it in database.
+        (ii) Store that token inside cookies.
+        (iii) Get token from cookies and verify the user.
+
+(i) Generate JWT Token and stored it in database:
+        > First install jsonwebtoken and we have to use two method
+                sign(payload, SecretOrPrivatekey) and verify()
+
+(ii) Store that token inside cookie:
+        > use res.cookie(key, geneartedTokenValue, {expiresIn: "". httpOnly: true})
+        Note : For testing purpose of cookie passed in loading of profile page.
+
+

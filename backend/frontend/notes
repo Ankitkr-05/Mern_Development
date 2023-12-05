@@ -1,0 +1,259 @@
+#1. First create component folder and create file Home, Profile, 
+    About Us, Contact Us, Sign In, Sign Up page.
+
+#2. Then create responsive nav bar using ul, li, a tag.
+
+#3. Now, in anchor tag of href we need to pass url (/Component Name) 
+    For ex: /, /About, /Profile, /SignIn etc.
+    But in this case, page will get refresh.
+
+#4. So, we will use React-Router-DOM:  
+    To Open the New Page Without Reloading or Refresh the Page.
+    Install react router dom: npm install react-router-dom
+
+#5. Steps to implement react-router-dom in our Application for Nav bar:
+
+(i) Inside app.js component > import { Route } from react-router-dom;
+
+(ii) Now According to Route only it will show that page.
+     On click of any item from navbar: User will visit to that page which is inside Route.
+     So, place all component Home, About etc  inside Route tag.
+
+(iii) And thus, we need to pass attribute 'path' inside Route tag and
+      have to give value for path ex: /about.
+        So, it will redirect to that path on click from navbar.
+
+(iv) For showing page on initial load or for eaxct laod of page, 
+     we need to pass 'exect' attribute to that particular Route tag.
+
+(v) But still page is refreshing/reloading, so to handle that:
+    In nav bar we need to import: { Navlink } from 'react-router-dom';
+
+(vi) Finaly, instead of anchor tag (a) -> Replace with -> NavLink
+        and instead of 'href' ->  Replace with -> to
+
+(vii) On implementing above getting this error:
+        A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.
+        So, now follow down approach 
+        (Changes came after router@6 version)
+
+    (a) import { BrowserRouter as Router, Routes, Route } from
+        'react-router-dom'
+
+    (b) Inside:
+        <Router>
+            <Routes>
+                {wrap above Route tag code and pass 'element' attribute in which pass component name}
+            </Routes>
+        </Router>
+
+
+Note: Whatever name we are providing in 'path' should be match with 
+      the name we are passing in 'to' attribute of navbar.
+      It can be case insensitive.
+
+      (c) Changes after react-router-dom@6 version: 
+            During use of 'NavLink'
+
+            -> Make sure that your NavLink components are placed within a Router component. In the context of React Router v6, the useLocation hook needs to be used within the scope of a Router.
+            -> Means inside BrowserRouter tag only we need to keep
+                NavBar component also.
+
+
+#6. Now make registration page:
+
+    (a) CSS:
+        (i) box-shadow: h-offset v-offset blur spread color inset;
+
+                h-offset: This is the horizontal offset of the shadow. A positive value moves the shadow to the right, while a negative value moves it to the left.
+
+                v-offset: This is the vertical offset of the shadow. A positive value moves the shadow downwards, while a negative value moves it upwards.
+
+                blur: This is the blur radius of the shadow. A higher value creates a more blurred shadow. Use 0 for a sharp edge.
+
+                spread: This is the spread radius, which indicates how much the shadow should expand or contract. A positive value expands the shadow, and a negative value contracts it. This property is optional.
+
+                color: This is the color of the shadow. It can be specified using a color keyword, a hex value, an RGB value, or other color representations.
+
+                inset: This is an optional keyword that, when present, changes the shadow from an outer shadow to an inner shadow.
+
+                Ex: box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+     (b) For Icons: material design iconic font
+            (i) Visit website: 
+                 https://zavoloklom.github.io/material-design-iconic-font/
+            
+            (ii) Copy CDN link from there > Go in public folder >
+                    index.html > Paste in link section
+            
+            (iii) Now, in website we see: icons option in navbar
+                    Find required icon and copy paste in code.
+
+#7. To Store User Registration Form Data in Front-End React State
+
+#8. To Connect Frontend with Backend (NodeJS & MongoDB) 
+        To Store Registration Form Data in Database:
+
+(i) In vs code open terminal and inside that click on split icon:
+     > One side start frontend application: npm start
+     > Second side start backend server: npm run dev
+
+(ii) Task: Whatever we are filling in registration form from frontend
+                We have to store those data in DB.
+
+(a) We will use both fetch and axios for Api call.
+        So on submit of registartion form call api call.
+
+(b) On using fetch and sending request to server got multiple issue:
+        (i) Error: Cannot POST /registration :
+                    CORS Error (Cross-origin resource sharing)
+                    CORS defines a way for client web applications that are loaded in one domain to interact with resources in a different domain.
+
+            In simple word: As we are sending the request from frontend means its going to url: 
+            'http://localhost:3000/registration'
+            but our backend server is running at port 8000. So we need to send the request to URL 
+            'http://localhost:8000/registration'
+
+        >  Solution: One possible way to solve CORS or to interact frontend with backend URL:
+        Add 'proxy': 'http//localhost:8000' in package.json file of frontend (React js) and then restart frontend server.
+
+        (ii) Error: On sending all registration field values from frontend to backend was coming as Null.
+        Means able to send data correctly from frontend but coming as null in backend.
+
+        >   Solution: Because of using: 
+                app.use(express.urlencoded({extended: false}));
+            instead of using : app.use(express.json());
+
+        > The express.urlencoded({ extended: false }) middleware is
+            use for parsing application/x-www-form-urlencoded data, not JSON data. To handle JSON data, you need to use express.json().
+
+        > Means: The 'express.urlencoded' middleware is for handling
+            form data, and the 'express.json()' middleware is for handling JSON data.
+
+
+        (iii) Error: export 'useHistory' (imported as 'useHistory')  was not found in 'react-router-dom'
+        
+        > Solution: The correct hook to use for accessing the history object in React Router v6 is useNavigate, not useHistory. The useNavigate hook provides a function to navigate to different routes.
+
+
+        (iv) Error: MongoServerError: E11000 duplicate key error    collection: mernstackDatabase.mernstackcollections index: email_1 dup key: { email: null }
+
+        Solution: Steps:
+        (i) Optional: Delete all document from DB (mongodb Atlas)
+        (ii) Important: In mongodb Atlas: Go in 'Indexes' section of collection > And then delete that particular indexes if there multiple key properties are set as unique.
+
+        (v) Error: Not executing complete code of 'handleSubmit
+                    method: means, not redirecting to login page and not able to see frontend console as well.
+
+        > Explanation of Issue: As in frontend for submission of  
+            registration form data, I am using button tag instead of input tag.
+            So with button tag attribute 'onSubmit' its not working
+            But with input tag attribute 'onClick' its working.
+
+        > Solution: The reason why code is not working as 
+                    expected with the <button> tag and the 'onSubmit' attribute is that 'onSubmit' event is typically used on <form> elements, not <button> elements. The 'onSubmit' event is triggered when the form is submitted, not when a button is clicked.
+                   
+                   
+        > For Above scenario: Keep type of button as 'submit'.
+
+        > Second Case: If you prefer to use a <button> outside of a
+                       form, use the 'onClick' event instead of 'onSubmit' event.
+            
+        > In this case: use type="button" and onClick={handleSubmit}
+                        method on <button> tag instead of <form>
+
+(c) Now, we will do same API call by using 'Axios'
+            > Install Axios using: npm install axios.
+            > Use like axios.post(), axios.get()
+            > No need to pass 'headers' property and 'body' key.
+
+
+#9. Implement Login System with JWT & Stored Cookie in MERN STACK 
+    using Fetch and then same by using Axios.
+
+#10. User Authentication in MERN Stack Using JWT:
+     About Page Authentication | Check User Login or Not:
+        (i) Install cookie-parser to get the value of stored cookies 
+                name and its value.  using npm install cookie-parser
+        (ii) In Backend: First create a 'get' method request for about.
+        (iii) And call a middleware 'Authenticate' where need to match
+                the jsonweb token that is coming from frontend (i.e., stored as cookies).
+        (iv) If it matches by using jsonwebtoken.verify() then user
+                can able to visit about page and able to get data of about page otherwise user redirect to login page.
+
+    Note: For Sending the stored cookies(stored during login) from 
+            Frontend to backend:
+            During calling API for About Page we need to send below data:
+            headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+            credentials: "include"
+
+            Here, credentials: "include"
+                    will include the stored cookies in payload
+
+
+#11. Issue facing during above:
+        (i)  The same API call of about page inside useEffect was
+                happenings two times and thus throwing 304 error.
+        
+        > Solution: Have taken use of useRef() hooks and called the API
+                    inside condition. So, only single time API call take place.
+
+#12. Get About Us Page Data Dynamic After User Authentication
+
+#13. Get Contact Us Page Data Dynamic After User Authentication 
+
+#14. To Implement Logout in MERN:
+        (i) Create a simple Logout Component First (i.e., LogOut.js)
+        (ii) Add in App.js file and also in Nav Bar for Now.
+        (iii) In Backend: apimethod.js file create to handle get 
+                            method request API call.
+        (iv) Inside that we have to use 'res.ClearCookie' to delete
+                the cookie, which will make the user logout.
+                It accepts two parameter cookies name and path as a key-value pair.
+        (v) As according to authentication once we remove cookies it
+            makes user logout. So same is happenning here, so when user click on logout from UI, it will delete the cookie and user will return back to login page, 
+            so that means we need to call created 'get' method API of backend on logout.
+        (vi) We will do this either by 'async' 'await' or by 'promise'.
+             Here, we are using promise to call API.
+                
+            Note:
+            Inside useEffect we can not use 'async' 'await' directly but we can directly use 'promise'.
+
+#15. Implement structure to Toggle Login Logout in Navbar instead of
+     using login and logout both in NavBar:
+     For that we require: ContextAPI and useReducer
+
+
+ >>>>> Please Refer 'MernNotes' for complete description of:
+ >>>>>      'contextAPI' and 'useReducer'
+
+(i) First we will use 'contextAPI' so we can manage the state in 
+    different component (As we have to show, login, logout and register page conditionally )..
+
+    (a) With the help of 'createContext' we can use the context API in
+         App.js file.
+    (b) Then we use 'provider' and return all values inside of App.js
+        for NavBAr. 
+        'provider' value takes two parameter (currentState, dispatch)c.
+    (c) Now inside App.js we need to use 'useReducer'. As we know  
+        'useReducer' return state and dispatch, That we can pass as value of provider to different components.
+    (d) And wherever we have to use 'useContext' in that place we use
+        'consumer' that can use two value (currentState, dispatch) which are getting from provider. And thus dispatch action from the login, logout component and pass type and payload value
+    (e) Then we use 'useReducer' to manage state.
+        Means when we dispatch action from login, logout page and pass the payload value using 'useContext' then with the help of useReducer we can update the value of state depending on action type and payload.
+    (f) Finally, use State value in navBar for handle logout, login,
+        registration page conditionally (state value getting in consumer)
+
+
+
+
+
+        
+
+
+
+
+                    
